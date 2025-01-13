@@ -1,7 +1,6 @@
 import { check, validationResult } from "express-validator";
 import Usuario from "../models/Usuario.js";
-import { generarId } from "../helpers/token.js";
-
+import { generarJWT, generarId } from "../helpers/token.js";
 
 const formularioLogin = (req, res) => {
   res.render("auth/login", {
@@ -47,7 +46,18 @@ const autenticar = async (req, res) => {
 
   //Autenticacion
 
-  const token =
+  const token = generarJWT({ id: usuario.id, nombre: usuario.nombre });
+
+  console.log(token);
+
+  //Almacenar cookie
+
+  return res
+    .cookie("_token", token, {
+      httpOnly: true,
+      secure: true,
+    })
+    .redirect("/mis-propiedades");
 };
 
 const formularioRegistro = (req, res) => {
@@ -119,6 +129,10 @@ const registrar = async (req, res) => {
     email,
     password,
     token: generarId(),
+  });
+  return res.render("auth/registro", {
+    pagina: "Crear cuenta",
+    creado: "Usuario creado con exito",
   });
 };
 

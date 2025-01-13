@@ -1,5 +1,6 @@
 import express from "express";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
+import propiedadRoutes from "./routes/propiedadRoutes.js";
 import db from "./config/db.js";
 
 // App
@@ -29,6 +30,7 @@ app.use(express.static("public"));
 
 // Routes
 app.use("/auth", usuarioRoutes);
+app.use("/", propiedadRoutes);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
